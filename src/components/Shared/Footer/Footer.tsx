@@ -27,6 +27,7 @@ const Footer = () => {
           <Image src={linkedIcon} width={30} height={30} alt="facebook" />
         </Stack>
         <div className="border-b-[1px] border-dashed"></div>
+
         <Stack
           direction="row"
           gap={2}
