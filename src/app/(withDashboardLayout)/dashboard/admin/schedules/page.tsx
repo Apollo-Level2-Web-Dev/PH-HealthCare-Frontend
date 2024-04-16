@@ -4,7 +4,7 @@ import ScheduleModal from "./components/ScheduleModal";
 import { useEffect, useState } from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+
 import { useGetAllSchedulesQuery } from "@/redux/api/scheduleApi";
 import dayjs from "dayjs";
 import { ISchedule } from "@/types/schedule";
@@ -46,14 +46,9 @@ const SchedulesPage = () => {
       align: "center",
       renderCell: ({ row }) => {
         return (
-          <Box>
-            <IconButton aria-label="delete">
-              <DeleteIcon sx={{ color: "red" }} />
-            </IconButton>
-            <IconButton aria-label="delete">
-              <EditIcon sx={{}} />
-            </IconButton>
-          </Box>
+          <IconButton aria-label="delete">
+            <DeleteIcon sx={{ color: "red" }} />
+          </IconButton>
         );
       },
     },
