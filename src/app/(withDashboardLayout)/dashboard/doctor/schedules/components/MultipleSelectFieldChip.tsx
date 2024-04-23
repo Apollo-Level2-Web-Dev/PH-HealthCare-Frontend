@@ -52,17 +52,21 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
    };
 }
 
-export default function MultipleSelectFieldChip({ schedules }: any) {
+export default function MultipleSelectFieldChip({
+   schedules,
+   selectedScheduleIds,
+   setSelectedScheduleIds,
+}: any) {
    const theme = useTheme();
-   const [personName, setPersonName] = React.useState<string[]>([]);
+   // const [personName, setPersonName] = React.useState<string[]>([]);
 
-   console.log(personName);
-
-   const handleChange = (event: SelectChangeEvent<typeof personName>) => {
+   const handleChange = (
+      event: SelectChangeEvent<typeof selectedScheduleIds>
+   ) => {
       const {
          target: { value },
       } = event;
-      setPersonName(
+      setSelectedScheduleIds(
          // On autofill we get a stringified value.
          typeof value === 'string' ? value.split(',') : value
       );
@@ -70,19 +74,19 @@ export default function MultipleSelectFieldChip({ schedules }: any) {
 
    return (
       <div>
-         <FormControl sx={{ m: 1, width: 300 }}>
+         <FormControl sx={{ width: 300 }}>
             <InputLabel id='demo-multiple-chip-label'>Chip</InputLabel>
             <Select
                labelId='demo-multiple-chip-label'
                id='demo-multiple-chip'
                multiple
-               value={personName}
+               value={selectedScheduleIds}
                onChange={handleChange}
                input={<OutlinedInput id='select-multiple-chip' label='Chip' />}
                renderValue={(selected) => {
                   return (
                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                        {selected.map((value) => {
+                        {selected.map((value: any) => {
                            const selectedSchedule = schedules.find(
                               (schedule: any) => schedule.id === value
                            );
@@ -108,7 +112,7 @@ export default function MultipleSelectFieldChip({ schedules }: any) {
                   <MenuItem
                      key={schedule.id}
                      value={schedule.id}
-                     style={getStyles(schedule.id, personName, theme)}
+                     style={getStyles(schedule.id, selectedScheduleIds, theme)}
                   >
                      {`${getTimeIn12HourFormat(
                         schedule.startDate
