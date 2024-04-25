@@ -8,19 +8,39 @@ import {
    useUpdateDoctorMutation,
 } from '@/redux/api/doctorApi';
 import PHForm from '@/components/Forms/PHForm';
-import { FieldValue } from 'react-hook-form';
+import { FieldValues } from 'react-hook-form';
 import { Button, Grid } from '@mui/material';
 import PHInput from '@/components/Forms/PHInput';
 import PHSelectField from '@/components/Forms/PHSelectField';
 import { Gender } from '@/types';
 import MultipleSelectChip from './MultipleSelectChip';
 import { useGetAllSpecialtiesQuery } from '@/redux/api/specialtiesApi';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 type TProps = {
    open: boolean;
    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
    id: string;
 };
+
+const validationSchema = z.object({
+   experience: z.preprocess(
+      (x) => (x ? x : undefined),
+      z.coerce.number().int().optional()
+   ),
+   apointmentFee: z.preprocess(
+      (x) => (x ? x : undefined),
+      z.coerce.number().int().optional()
+   ),
+   name: z.string().optional(),
+   contactNumber: z.string().optional(),
+   registrationNumber: z.string().optional(),
+   gender: z.string().optional(),
+   qualification: z.string().optional(),
+   currentWorkingPlace: z.string().optional(),
+   designation: z.string().optional(),
+});
 
 const ProfileUpdateModal = ({ open, setOpen, id }: TProps) => {
    const { data: doctorData } = useGetDoctorQuery(id);
@@ -31,11 +51,13 @@ const ProfileUpdateModal = ({ open, setOpen, id }: TProps) => {
 
    console.log(selectedSpecialtiesIds);
 
-   const submitHandler = async (values: FieldValue) => {
-      const specialties = allSpecialties.map((specialtiesId: string) => ({
-         specialtiesId,
-         isDeleted: false,
-      }));
+   const submitHandler = async (values: FieldValues) => {
+      const specialties = selectedSpecialtiesIds.map(
+         (specialtiesId: string) => ({
+            specialtiesId,
+            isDeleted: false,
+         })
+      );
 
       console.log({ id });
       // return;
@@ -66,7 +88,8 @@ const ProfileUpdateModal = ({ open, setOpen, id }: TProps) => {
       updatedValues.specialties = specialties;
 
       try {
-         updateDoctor({ body: { updatedValues, id } });
+         updateDoctor({ body: updatedValues, id });
+         setOpen(false);
       } catch (error) {
          console.log(error);
       }
@@ -74,7 +97,11 @@ const ProfileUpdateModal = ({ open, setOpen, id }: TProps) => {
 
    return (
       <PHFullScreenModal open={open} setOpen={setOpen} title='Update Profile'>
-         <PHForm onSubmit={submitHandler} defaultValues={doctorData}>
+         <PHForm
+            onSubmit={submitHandler}
+            defaultValues={doctorData}
+            resolver={zodResolver(validationSchema)}
+         >
             <Grid container spacing={2} sx={{ my: 5 }}>
                <Grid item xs={12} sm={12} md={4}>
                   <PHInput name='name' label='Name' sx={{ mb: 2 }} fullWidth />

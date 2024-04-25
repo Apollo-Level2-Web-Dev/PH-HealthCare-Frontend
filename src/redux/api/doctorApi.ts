@@ -55,7 +55,7 @@ export const doctorApi = baseApi.injectEndpoints({
                data: data.body,
             };
          },
-         invalidatesTags: [tagTypes.doctor],
+         invalidatesTags: [tagTypes.doctor, tagTypes.user],
       }),
    }),
 });
