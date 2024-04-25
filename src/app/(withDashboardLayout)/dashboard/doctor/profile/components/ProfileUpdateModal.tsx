@@ -3,7 +3,10 @@
 import React, { useState } from 'react';
 
 import PHFullScreenModal from '@/components/Shared/PHModal/PHFullScreenModal';
-import { useGetDoctorQuery } from '@/redux/api/doctorApi';
+import {
+   useGetDoctorQuery,
+   useUpdateDoctorMutation,
+} from '@/redux/api/doctorApi';
 import PHForm from '@/components/Forms/PHForm';
 import { FieldValue } from 'react-hook-form';
 import { Button, Grid } from '@mui/material';
@@ -24,13 +27,49 @@ const ProfileUpdateModal = ({ open, setOpen, id }: TProps) => {
    const { data: allSpecialties } = useGetAllSpecialtiesQuery(undefined);
    const [selectedSpecialtiesIds, setSelectedSpecialtiesIds] = useState([]);
 
+   const [updateDoctor, { isLoading: updating }] = useUpdateDoctorMutation();
+
    console.log(selectedSpecialtiesIds);
 
    const submitHandler = async (values: FieldValue) => {
-      const specialties = allSpecialties.map((specialtiesId) => ({
+      const specialties = allSpecialties.map((specialtiesId: string) => ({
          specialtiesId,
          isDeleted: false,
       }));
+
+      console.log({ id });
+      // return;
+
+      const excludedFields: Array<keyof typeof values> = [
+         'email',
+         'id',
+         'role',
+         'needPasswordChange',
+         'status',
+         'createdAt',
+         'updatedAt',
+         'isDeleted',
+         'averageRating',
+         'review',
+         'profilePhoto',
+         'registrationNumber',
+         'schedules',
+         'doctorSpecialties',
+      ];
+
+      const updatedValues = Object.fromEntries(
+         Object.entries(values).filter(([key]) => {
+            return !excludedFields.includes(key);
+         })
+      );
+
+      updatedValues.specialties = specialties;
+
+      try {
+         updateDoctor({ body: { updatedValues, id } });
+      } catch (error) {
+         console.log(error);
+      }
    };
 
    return (
@@ -134,7 +173,9 @@ const ProfileUpdateModal = ({ open, setOpen, id }: TProps) => {
                </Grid>
             </Grid>
 
-            <Button type='submit'>Save</Button>
+            <Button type='submit' disabled={updating}>
+               Save
+            </Button>
          </PHForm>
       </PHFullScreenModal>
    );
