@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import PHFullScreenModal from '@/components/Shared/PHModal/PHFullScreenModal';
 import {
@@ -43,13 +43,21 @@ const validationSchema = z.object({
 });
 
 const ProfileUpdateModal = ({ open, setOpen, id }: TProps) => {
-   const { data: doctorData } = useGetDoctorQuery(id);
+   const { data: doctorData, refetch, isSuccess } = useGetDoctorQuery(id);
    const { data: allSpecialties } = useGetAllSpecialtiesQuery(undefined);
    const [selectedSpecialtiesIds, setSelectedSpecialtiesIds] = useState([]);
 
    const [updateDoctor, { isLoading: updating }] = useUpdateDoctorMutation();
 
-   console.log(selectedSpecialtiesIds);
+   useEffect(() => {
+      if (!isSuccess) return;
+
+      setSelectedSpecialtiesIds(
+         doctorData?.doctorSpecialties.map((sp: any) => {
+            return sp.specialtiesId;
+         })
+      );
+   }, [isSuccess]);
 
    const submitHandler = async (values: FieldValues) => {
       const specialties = selectedSpecialtiesIds.map(
@@ -89,6 +97,7 @@ const ProfileUpdateModal = ({ open, setOpen, id }: TProps) => {
 
       try {
          updateDoctor({ body: updatedValues, id });
+         await refetch();
          setOpen(false);
       } catch (error) {
          console.log(error);
