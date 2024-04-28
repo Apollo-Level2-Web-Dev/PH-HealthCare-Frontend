@@ -8,6 +8,7 @@ import { dateFormatter } from '@/utils/dateFormatter';
 import { ISchedule } from '@/types/schedule';
 import dayjs from 'dayjs';
 import { useGetAllDoctorSchedulesQuery } from '@/redux/api/doctorScheduleApi';
+import AddIcon from '@mui/icons-material/Add';
 
 const DoctorSchedulesPage = () => {
    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -27,6 +28,8 @@ const DoctorSchedulesPage = () => {
    const schedules = data?.doctorSchedules;
    const meta = data?.meta;
 
+   console.log({ schedules });
+
    let pageCount: number;
 
    if (meta?.total) {
@@ -41,8 +44,7 @@ const DoctorSchedulesPage = () => {
       const updateData = schedules?.map(
          (schedule: ISchedule, index: number) => {
             return {
-               sl: index + 1,
-               id: schedule?.doctorId,
+               id: schedule?.scheduleId,
                startDate: dateFormatter(schedule?.schedule?.startDate),
                startTime: dayjs(schedule?.startDate).format('hh:mm a'),
                endTime: dayjs(schedule?.endDate).format('hh:mm a'),
@@ -53,7 +55,6 @@ const DoctorSchedulesPage = () => {
    }, [schedules]);
 
    const columns: GridColDef[] = [
-      { field: 'sl', headerName: 'SL' },
       { field: 'startDate', headerName: 'Date', flex: 1 },
       { field: 'startTime', headerName: 'Start Time', flex: 1 },
       { field: 'endTime', headerName: 'End Time', flex: 1 },
@@ -75,7 +76,11 @@ const DoctorSchedulesPage = () => {
 
    return (
       <Box>
-         <Button onClick={() => setIsModalOpen(true)}>
+         <Button
+            onClick={() => setIsModalOpen(true)}
+            endIcon={<AddIcon />}
+            sx={{ mt: 3.5 }}
+         >
             Create Doctor Schedule
          </Button>
          <DoctorScheduleModal open={isModalOpen} setOpen={setIsModalOpen} />
@@ -99,6 +104,7 @@ const DoctorSchedulesPage = () => {
                                  }}
                               >
                                  <Pagination
+                                    color='primary'
                                     count={pageCount}
                                     page={page}
                                     onChange={handleChange}
