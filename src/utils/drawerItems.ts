@@ -11,6 +11,9 @@ import AirlineSeatIndividualSuiteIcon from '@mui/icons-material/AirlineSeatIndiv
 import TryIcon from '@mui/icons-material/Try';
 import PersonIcon from '@mui/icons-material/Person';
 import KeyIcon from '@mui/icons-material/Key';
+import BookOnlineIcon from '@mui/icons-material/BookOnline';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 
 export const drawerItems = (role: UserRole): DrawerItem[] => {
    const roleMenus: DrawerItem[] = [];
@@ -69,7 +72,7 @@ export const drawerItems = (role: UserRole): DrawerItem[] => {
             {
                title: 'Appointments',
                path: `${role}/appointments`,
-               icon: CalendarMonthIcon,
+               icon: BookOnlineIcon,
             },
             {
                title: 'Reviews',
@@ -94,7 +97,7 @@ export const drawerItems = (role: UserRole): DrawerItem[] => {
             {
                title: 'Appointments',
                path: `${role}/appointment`,
-               icon: CalendarMonthIcon,
+               icon: BookOnlineIcon,
             }
          );
          break;
@@ -104,17 +107,17 @@ export const drawerItems = (role: UserRole): DrawerItem[] => {
             {
                title: 'Appointments',
                path: `${role}/appointments`,
-               icon: DashboardIcon,
+               icon: BookOnlineIcon,
             },
             {
                title: 'Prescriptions',
                path: `${role}/prescriptions`,
-               icon: DashboardIcon,
+               icon: ReceiptLongIcon,
             },
             {
                title: 'Payment History',
                path: `${role}/payment-history`,
-               icon: DashboardIcon,
+               icon: AttachMoneyIcon,
             }
          );
          break;

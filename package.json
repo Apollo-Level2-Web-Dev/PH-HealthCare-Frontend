@@ -20,6 +20,7 @@
     "@mui/x-data-grid": "^7.1.0",
     "@mui/x-date-pickers": "^7.1.0",
     "@reduxjs/toolkit": "^2.2.2",
+    "agora-react-uikit": "^1.2.0",
     "axios": "^1.6.8",
     "dayjs": "^1.11.10",
     "jwt-decode": "^4.0.0",
