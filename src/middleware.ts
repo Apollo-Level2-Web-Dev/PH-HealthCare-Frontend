@@ -20,7 +20,7 @@ const roleBasedPrivateRoutes = {
 
 export function middleware(request: NextRequest) {
    const { pathname } = request.nextUrl;
-   console.log({ pathname });
+
    const accessToken = cookies().get('accessToken')?.value;
 
    if (!accessToken) {
@@ -30,8 +30,6 @@ export function middleware(request: NextRequest) {
          return NextResponse.redirect(new URL('/login', request.url));
       }
    }
-
-   console.log({ pathname });
 
    if (
       accessToken &&

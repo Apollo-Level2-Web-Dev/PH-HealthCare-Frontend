@@ -26,7 +26,7 @@ const LoginPage = () => {
       // console.log(values);
       try {
          const res = await userLogin(values);
-         if (res?.data?.accessToken) {
+         if (res?.data?.accessTokeLn) {
             toast.success(res?.message);
             storeUserInfo({ accessToken: res?.data?.accessToken });
             // router.push("/dashboard");
