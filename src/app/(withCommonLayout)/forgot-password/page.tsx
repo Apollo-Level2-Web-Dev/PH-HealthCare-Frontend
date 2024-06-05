@@ -31,6 +31,7 @@ const ForgotPassword = () => {
          console.log(error);
       }
    };
+
    return (
       <Stack
          sx={{
